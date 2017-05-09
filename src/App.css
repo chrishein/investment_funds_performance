@@ -1,0 +1,32 @@
+.App {
+  width: 100%;
+  height: 100%;
+}
+
+.content { height: calc(100% - 52px); }
+
+.left-col, .right-col,
+.left-col > .panel, .right-col > .panel { height: 100%; }
+
+.panel {
+  margin-bottom: 0px !important;
+}
+.panel-body {
+  height: 100%;
+}
+
+.fund-list-panel {
+  padding-left: 5px;
+  overflow-y: scroll;
+}
+
+.chart-container {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  background-color: #fff;
+}
