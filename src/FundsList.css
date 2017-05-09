@@ -1,0 +1,12 @@
+div.fund-list {
+  height: 100%;
+}
+
+.list-group {
+  overflow-y: scroll;
+  height: 100%;
+}
+
+.fund-list-search {
+  margin-bottom: 5px;
+}

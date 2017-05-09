@@ -8,16 +8,15 @@
 .left-col, .right-col,
 .left-col > .panel, .right-col > .panel { height: 100%; }
 
+.left-col > .panel {
+  padding-left: 5px;
+}
+
 .panel {
   margin-bottom: 0px !important;
 }
 .panel-body {
   height: 100%;
-}
-
-.fund-list-panel {
-  padding-left: 5px;
-  overflow-y: scroll;
 }
 
 .chart-container {

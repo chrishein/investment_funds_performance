@@ -120,7 +120,7 @@ class App extends Component {
 
         <Row className="content no-gutter">
           <Col md={3} className="left-col">
-            <Panel className="fund-list-panel">
+            <Panel>
               <FundsList data={this.state.funds} handleFundSelection={this.handleFundSelection} />
             </Panel>
           </Col>
