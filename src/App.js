@@ -59,6 +59,7 @@ class App extends Component {
                           fund.color = this.randomDarkColor();
                           return fund;
                         });
+                        decoratedFunds = decoratedFunds.sort((a, b) => a.name.localeCompare(b.name));
                         this.setState({funds: decoratedFunds});
                    });
     }
