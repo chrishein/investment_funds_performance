@@ -88,15 +88,18 @@ class App extends Component {
     let chartData = this.state.chartData;
     let filteredChartData = null;
 
+    let initialDate = chartData[0];
+
     filteredChartData = chartData.map((dayData) => {
       let newdayData = {};
 
       for (var key in dayData) {
         if (dayData.hasOwnProperty(key)) {
-          if (fundsHash[key] == null) {
+          if (key === 'date') {
             newdayData[key] = dayData[key];
           } else if (fundsHash[key].selected) {
-            newdayData[key] = dayData[key];
+            let precentageChange = Math.round((dayData[key] * 100.0 / initialDate[key]) * 1e2 ) / 1e2;
+            newdayData[key] = precentageChange;
           }
         }
       }
