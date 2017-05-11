@@ -9,15 +9,14 @@ import {
   ResponsiveContainer
   } from 'recharts';
 
+import htmlColors from 'html-colors';
+import tinycolor from 'tinycolor2';
+
 import Header from './Header.js';
 import FundsList from './FundsList.js';
 
 import './App.css';
 
-// import htmlColors from './html-colors';
-
-import htmlColors from 'html-colors';
-import tinycolor from 'tinycolor2';
 
 class App extends Component {
    constructor() {
@@ -33,8 +32,6 @@ class App extends Component {
   componentDidMount() {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
-    // const colorKeys = Object.keys(htmlColors);
 
     fetch('data.json', {
                headers: myHeaders,
@@ -72,7 +69,6 @@ class App extends Component {
   }
 
   handleFundSelection(fundId) {
-    console.log('here');
     let funds = this.state.funds;
 
     funds.some((fund) => {

@@ -34,7 +34,6 @@ class FundsList extends Component {
       var keyWord = e.target.value;
 
       var filteredData = this.state.data.filter((item) => {
-        console.log(item);
         return item.name.toLowerCase().search(keyWord.toLowerCase()) !== -1;
       });
 
