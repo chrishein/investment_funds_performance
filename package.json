@@ -9,6 +9,7 @@
     "html-colors": "0.0.4",
     "jquery": "^3.2.1",
     "react": "^15.4.2",
+    "moment": "^2.18.1",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.2",
     "recharts": "^0.22.0",

@@ -11,6 +11,7 @@ import {
 
 import htmlColors from 'html-colors';
 import tinycolor from 'tinycolor2';
+import moment from 'moment';
 
 import Header from './Header.js';
 import FundsList from './FundsList.js';
@@ -22,10 +23,16 @@ class App extends Component {
    constructor() {
      super();
      this.handleFundSelection = this.handleFundSelection.bind(this);
+
+     let startDate = moment('2017-01-10');
+     let endDate = moment('2017-05-09');
+
      this.state = {
         chartData: [],
         filteredChartData: [],
-        funds: []
+        funds: [],
+        startDate: startDate,
+        endDate: endDate
     };
   }
 
@@ -80,33 +87,31 @@ class App extends Component {
     });
     this.setState({ funds: funds });
 
-    let fundsHash = {};
-    funds.forEach((fund) => {
-      fundsHash[fund.id] = { selected: fund.selected };
-    });
+    let filteredChartData = this.filterData(this.state.chartData, this.state.startDate, this.state.endDate, this.state.funds);
+    this.setState({ filteredChartData: filteredChartData });
+  }
 
-    let chartData = this.state.chartData;
-    let filteredChartData = null;
+  filterData(chartData, startDate, endDate, funds) {
+    let startDateString = startDate.format("YYYY-MM-DD");
+    let endDateString = endDate.format("YYYY-MM-DD");
+    let filteredChartData = chartData.filter((dayData => {
+      return startDateString <= dayData.date && endDateString >= dayData.date;
+    }));
 
+    let selectedFunds = funds.filter((item) => item.selected);
     let initialDate = chartData[0];
 
-    filteredChartData = chartData.map((dayData) => {
-      let newdayData = {};
+    return filteredChartData.map((dayData) => {
+      let newdayData = {
+        date: dayData.date
+      };
 
-      for (var key in dayData) {
-        if (dayData.hasOwnProperty(key)) {
-          if (key === 'date') {
-            newdayData[key] = dayData[key];
-          } else if (fundsHash[key].selected) {
-            let precentageChange = Math.round((dayData[key] * 100.0 / initialDate[key]) * 1e2 ) / 1e2;
-            newdayData[key] = precentageChange;
-          }
-        }
-      }
+      selectedFunds.forEach((fund) => {
+        newdayData[fund.id] = Math.round((dayData[fund.id] * 100.0 / initialDate[fund.id]) * 1e2 ) / 1e2;
+      })
 
       return newdayData;
     });
-    this.setState({ filteredChartData: filteredChartData });
   }
 
   render() {
