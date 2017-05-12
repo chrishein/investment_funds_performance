@@ -110,6 +110,10 @@ class App extends Component {
   }
 
   render() {
+    let selectedFunds = this.state.funds.filter((item) => item.selected).map((fund) => {
+      return (<Line key={fund.id} name={fund.name} dataKey={fund.id} dot={false}
+                type="linear" stroke={fund.color} isAnimationActive={false} />)
+    });
     return (
       <div className="App">
         <Row>
@@ -133,17 +137,7 @@ class App extends Component {
                   <CartesianGrid strokeDasharray="3 3" />
                   <Tooltip/>
                   <Legend />
-
-                  {
-                    this.state.funds.map((fund) => {
-                      if (fund.selected) {
-                        return (<Line key={fund.id} name={fund.name} dataKey={fund.id} dot={false}
-                                  type="linear" stroke={fund.color} isAnimationActive={false} />)
-                      }
-                      return null;
-                    })
-                  }
-
+                  {selectedFunds}
                 </LineChart>
               </ResponsiveContainer>
             </Panel>
