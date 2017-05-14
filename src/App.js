@@ -12,7 +12,10 @@ import {
 import htmlColors from 'html-colors';
 import tinycolor from 'tinycolor2';
 import moment from 'moment';
+import { DateRangePicker } from 'react-dates';
 
+
+import 'react-dates/lib/css/_datepicker.css';
 import Header from './Header.js';
 import FundsList from './FundsList.js';
 
@@ -23,7 +26,7 @@ class App extends Component {
    constructor() {
      super();
      this.handleFundSelection = this.handleFundSelection.bind(this);
-
+     this.handleDateRangeChange = this.handleDateRangeChange.bind(this);
      let startDate = moment('2017-01-10');
      let endDate = moment('2017-05-09');
 
@@ -31,6 +34,8 @@ class App extends Component {
         chartData: [],
         filteredChartData: [],
         funds: [],
+        minDate: startDate,
+        maxDate: endDate,
         startDate: startDate,
         endDate: endDate
     };
@@ -40,17 +45,23 @@ class App extends Component {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    fetch('data.json', {
-               headers: myHeaders,
-               }
-             ).then(response => {
-               return response.json() })
-                   .then((json) => {
-                       this.setState({
-                         chartData: json,
-                         filteredChartData: json
-                        });
-                   });
+    fetch('data.json', {headers: myHeaders}).then(response => {
+      return response.json()
+    }).then((json) => {
+      let lastDateData = json.slice(-1)[0];
+      let endDate = moment(lastDateData.date);
+      let startDate = endDate.clone().subtract(90, 'days');
+      let minDate = moment(json[0].date);
+
+      this.setState({
+        chartData: json,
+        filteredChartData: json,
+        minDate: minDate,
+        maxDate: endDate,
+        startDate: startDate,
+        endDate: endDate
+      });
+    });
 
     fetch('funds.json', {
                headers: myHeaders,
@@ -86,6 +97,13 @@ class App extends Component {
       return false;
     });
     this.setState({ funds: funds });
+
+    let filteredChartData = this.filterData(this.state.chartData, this.state.startDate, this.state.endDate, this.state.funds);
+    this.setState({ filteredChartData: filteredChartData });
+  }
+
+  handleDateRangeChange({startDate, endDate}) {
+    this.setState({startDate, endDate});
 
     let filteredChartData = this.filterData(this.state.chartData, this.state.startDate, this.state.endDate, this.state.funds);
     this.setState({ filteredChartData: filteredChartData });
@@ -130,6 +148,15 @@ class App extends Component {
         <Row className="content no-gutter">
           <Col md={3} className="left-col">
             <Panel>
+                <DateRangePicker
+                  isOutsideRange={(day) => !day.isBetween(this.state.minDate, this.state.maxDate)}
+                  startDate={this.state.startDate}
+                  endDate={this.state.endDate}
+                  onDatesChange={this.handleDateRangeChange}
+                  focusedInput={this.state.focusedInput}
+                  onFocusChange={focusedInput => this.setState({ focusedInput })}
+                  displayFormat={() => moment.localeData('en-gb').longDateFormat('L')}
+                />
               <FundsList data={this.state.funds} handleFundSelection={this.handleFundSelection} />
             </Panel>
           </Col>

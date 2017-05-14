@@ -1,10 +1,10 @@
 div.fund-list {
-  height: 100%;
+  height: calc(100% - 39px);
 }
 
 .list-group {
   overflow-y: scroll;
-  height: 100%;
+  height: calc(100% - 34px);
 }
 
 .fund-list-search {
