@@ -42,3 +42,7 @@
 .DateRangePickerInput {
   border: 1px solid #ccc;
 }
+
+.fund-list-actions {
+  margin-left: 5px;
+}

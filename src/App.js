@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Panel, Row, Col
+  Panel, Row, Col, Button
 } from 'react-bootstrap';
 
 import {
@@ -27,6 +27,8 @@ class App extends Component {
      super();
      this.handleFundSelection = this.handleFundSelection.bind(this);
      this.handleDateRangeChange = this.handleDateRangeChange.bind(this);
+     this.handleCheckAll = this.handleCheckAll.bind(this);
+     this.handleUncheckAll = this.handleUncheckAll.bind(this);
      let startDate = moment('2017-01-10');
      let endDate = moment('2017-05-09');
 
@@ -97,14 +99,15 @@ class App extends Component {
       return false;
     });
     this.setState({ funds: funds });
-
-    let filteredChartData = this.filterData(this.state.chartData, this.state.startDate, this.state.endDate, this.state.funds);
-    this.setState({ filteredChartData: filteredChartData });
+    this.updateChartData();
   }
 
   handleDateRangeChange({startDate, endDate}) {
     this.setState({startDate, endDate});
+    this.updateChartData();
+  }
 
+  updateChartData() {
     let filteredChartData = this.filterData(this.state.chartData, this.state.startDate, this.state.endDate, this.state.funds);
     this.setState({ filteredChartData: filteredChartData });
   }
@@ -132,11 +135,28 @@ class App extends Component {
     });
   }
 
+  handleCheckAll() {
+    this.setSelectionToAllFunds(true);
+  }
+
+  handleUncheckAll() {
+    this.setSelectionToAllFunds(false);
+  }
+
+  setSelectionToAllFunds(seleted) {
+    let funds = this.state.funds;
+    funds.forEach((fund) => {
+        fund.selected = seleted;
+    });
+    this.setState({ funds: funds });
+  }
+
   render() {
     let selectedFunds = this.state.funds.filter((item) => item.selected).map((fund) => {
       return (<Line key={fund.id} name={fund.name} dataKey={fund.id} dot={false}
                 type="linear" stroke={fund.color} isAnimationActive={false} />)
     });
+
     return (
       <div className="App">
         <Row>
@@ -157,6 +177,14 @@ class App extends Component {
                   onFocusChange={focusedInput => this.setState({ focusedInput })}
                   displayFormat={() => moment.localeData('en-gb').longDateFormat('L')}
                 />
+              <Button className="fund-list-actions" aria-label="Check All"
+                title="Check All" onClick={this.handleCheckAll}>
+                <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>
+              </Button>
+              <Button className="fund-list-actions" aria-label="Uncheck All"
+                title="Uncheck All" onClick={this.handleUncheckAll}>
+                <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
+              </Button>
               <FundsList data={this.state.funds} handleFundSelection={this.handleFundSelection} />
             </Panel>
           </Col>
